@@ -71,8 +71,11 @@ jobs:
 
       - name: Update package versions
         run: |
+          VERSION="${{ steps.version.outputs.version }}"
           for pkg in packages/*/package.json; do
-            pnpm pkg set version=${{ steps.version.outputs.version }} --json -C $(dirname $pkg)
+            cd $(dirname $pkg)
+            npm version $VERSION --no-git-tag-version --allow-same-version
+            cd -
           done
 
       - name: Publish @z-os/core

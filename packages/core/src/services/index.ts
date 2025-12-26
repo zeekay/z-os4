@@ -1,0 +1,15 @@
+export {
+  fetchAvailableApps,
+  getInstalledApps,
+  installApp,
+  uninstallApp,
+  updateApp,
+  checkForUpdates,
+  clearAppCache,
+  compareVersions,
+  categoryGradients,
+  type AppManifest,
+  type InstalledApp,
+  type AppUpdate,
+  type AppCategory,
+} from './appLoader';

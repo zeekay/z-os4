@@ -23,6 +23,7 @@
     "@radix-ui/react-context-menu": "^2.2.16",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@replit/codemirror-vim": "^6.3.0",
+    "@z-os/apps": "workspace:*",
     "@z-os/apps-loader": "workspace:*",
     "@z-os/core": "workspace:*",
     "@z-os/sdk": "workspace:*",

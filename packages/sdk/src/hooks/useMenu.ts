@@ -34,13 +34,17 @@ function notifyMenuChange(menuBar: AppMenuBar | null) {
   menuEventHandlers.forEach((handler) => handler(menuBar));
 }
 
+interface UseMenuOptions {
+  appId?: string;
+}
+
 /**
  * useMenu - Manage app menu bar
  *
  * @example
  * ```tsx
  * function MyApp() {
- *   const { setMenuBar, createFileMenu } = useMenu();
+ *   const { setMenuBar, createFileMenu } = useMenu({ appId: 'ai.hanzo.myapp' });
  *
  *   useEffect(() => {
  *     setMenuBar({
@@ -64,7 +68,7 @@ function notifyMenuChange(menuBar: AppMenuBar | null) {
  * }
  * ```
  */
-export function useMenu(): MenuAPI & {
+export function useMenu(_options?: UseMenuOptions): MenuAPI & {
   createFileMenu: (options?: StandardFileMenuOptions) => AppMenu;
   createEditMenu: (options?: StandardEditMenuOptions) => AppMenu;
   createViewMenu: (items?: AppMenuItem[]) => AppMenu;

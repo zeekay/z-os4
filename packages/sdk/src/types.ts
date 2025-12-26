@@ -600,6 +600,49 @@ export interface StandardEditMenuOptions {
 }
 
 /**
+ * Dock context menu item (right-click on dock icon)
+ */
+export interface DockMenuItem {
+  /** Item type */
+  type: 'item' | 'separator';
+
+  /** Item label */
+  label?: string;
+
+  /** Unique identifier */
+  id?: string;
+
+  /** Click handler */
+  onClick?: () => void;
+
+  /** Is item disabled */
+  disabled?: boolean;
+
+  /** Icon */
+  icon?: React.ReactNode;
+}
+
+/**
+ * Dock configuration for the app
+ */
+export interface DockConfig {
+  /** Show in dock when running */
+  showWhenRunning?: boolean;
+
+  /** Show badge (e.g., notification count) */
+  badge?: string | number;
+
+  /** Progress indicator (0-100) */
+  progress?: number;
+
+  /** Bounce icon to get attention */
+  bounce?: boolean;
+
+  /** Context menu items (right-click) */
+  contextMenu?: DockMenuItem[];
+}
+
+/**
  * App definition - simplified way to define a zOS app
  */
 export interface ZOSAppDefinition {
@@ -609,9 +652,105 @@ export interface ZOSAppDefinition {
   /** App menu bar configuration */
   menuBar?: AppMenuBar;
 
+  /** Dock configuration */
+  dock?: DockConfig;
+
   /** App component */
-  component: React.ComponentType<{ onClose: () => void }>;
+  component: React.ComponentType<AppWindowProps>;
 
   /** Dock icon component */
   icon?: React.ComponentType<{ className?: string }>;
+
+  /** Lifecycle hooks */
+  lifecycle?: {
+    /** Called when app launches */
+    onLaunch?: () => void;
+    /** Called when app becomes active */
+    onActivate?: () => void;
+    /** Called when app becomes inactive */
+    onDeactivate?: () => void;
+    /** Called before app closes */
+    onClose?: () => boolean | void;
+    /** Called when app receives data from another app */
+    onReceiveData?: (data: unknown, from: string) => void;
+  };
+}
+
+/**
+ * Standard props passed to app window components
+ */
+export interface AppWindowProps {
+  onClose: () => void;
+  onFocus?: () => void;
+  onMinimize?: () => void;
+  onMaximize?: () => void;
+}
+
+/**
+ * useDock hook return type
+ */
+export interface DockAPI {
+  /** Set badge on dock icon */
+  setBadge: (badge: string | number | null) => void;
+
+  /** Set progress indicator */
+  setProgress: (progress: number | null) => void;
+
+  /** Bounce dock icon to get attention */
+  bounce: (type?: 'critical' | 'informational') => void;
+
+  /** Update context menu */
+  setContextMenu: (items: DockMenuItem[]) => void;
+
+  /** Request attention */
+  requestAttention: () => void;
+}
+
+/**
+ * Standard menu creators for common menu patterns
+ */
+export interface StandardMenus {
+  /** Create standard File menu */
+  createFileMenu: (options: StandardFileMenuOptions) => AppMenu;
+
+  /** Create standard Edit menu */
+  createEditMenu: (options: StandardEditMenuOptions) => AppMenu;
+
+  /** Create standard View menu */
+  createViewMenu: (options: StandardViewMenuOptions) => AppMenu;
+
+  /** Create standard Window menu */
+  createWindowMenu: (options: StandardWindowMenuOptions) => AppMenu;
+
+  /** Create standard Help menu */
+  createHelpMenu: (options: StandardHelpMenuOptions) => AppMenu;
+}
+
+/**
+ * View menu options
+ */
+export interface StandardViewMenuOptions {
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onActualSize?: () => void;
+  onToggleSidebar?: () => void;
+  onToggleToolbar?: () => void;
+  onEnterFullScreen?: () => void;
+}
+
+/**
+ * Window menu options
+ */
+export interface StandardWindowMenuOptions {
+  onMinimize?: () => void;
+  onZoom?: () => void;
+  onBringToFront?: () => void;
+}
+
+/**
+ * Help menu options
+ */
+export interface StandardHelpMenuOptions {
+  appName: string;
+  onHelp?: () => void;
 }

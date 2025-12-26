@@ -11,3 +11,4 @@ export { useFileSystem } from './useFileSystem';
 export { useClipboard } from './useClipboard';
 export { useKeyboard } from './useKeyboard';
 export { useMenu, subscribeToMenuChanges } from './useMenu';
+export { useDock, subscribeToDockChanges, getDockState } from './useDock';

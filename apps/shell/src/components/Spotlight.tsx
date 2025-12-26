@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, FileText, Terminal, Globe, Settings, Calculator, Mail, Music, Calendar, MessageSquare } from 'lucide-react';
+import {
+  Search, FileText, Terminal, Globe, Settings, Calculator, Mail, Music, Calendar, MessageSquare,
+  Image, Video, Clock, CloudSun, Bell, StickyNote, Activity, BookOpen, Newspaper, Headphones,
+  Mic, MapPin, Contact, Languages, Pen, Type, HardDrive, Key, TrendingUp, Eye, Wallet
+} from 'lucide-react';
 
 interface SpotlightProps {
   isOpen: boolean;
@@ -16,17 +20,55 @@ interface SearchResult {
 }
 
 const ALL_APPS: SearchResult[] = [
+  // Core Apps
   { id: 'finder', type: 'app', name: 'Finder', icon: <FileText className="w-8 h-8 text-blue-400" />, description: 'File Manager' },
   { id: 'safari', type: 'app', name: 'Safari', icon: <Globe className="w-8 h-8 text-blue-500" />, description: 'Web Browser' },
   { id: 'mail', type: 'app', name: 'Mail', icon: <Mail className="w-8 h-8 text-blue-400" />, description: 'Email Client' },
+  { id: 'photos', type: 'app', name: 'Photos', icon: <Image className="w-8 h-8 text-gradient" />, description: 'Photo Library' },
   { id: 'calendar', type: 'app', name: 'Calendar', icon: <Calendar className="w-8 h-8 text-red-400" />, description: 'Calendar' },
   { id: 'messages', type: 'app', name: 'Messages', icon: <MessageSquare className="w-8 h-8 text-green-400" />, description: 'Messaging' },
+  { id: 'facetime', type: 'app', name: 'FaceTime', icon: <Video className="w-8 h-8 text-green-500" />, description: 'Video Calls' },
   { id: 'music', type: 'app', name: 'Music', icon: <Music className="w-8 h-8 text-red-500" />, description: 'Music Player' },
   { id: 'terminal', type: 'app', name: 'Terminal', icon: <Terminal className="w-8 h-8 text-white" />, description: 'Command Line' },
+  { id: 'textedit', type: 'app', name: 'TextEdit', icon: <FileText className="w-8 h-8 text-blue-300" />, description: 'Text Editor' },
+
+  // Productivity
+  { id: 'notes', type: 'app', name: 'Notes', icon: <StickyNote className="w-8 h-8 text-yellow-400" />, description: 'Notes' },
+  { id: 'reminders', type: 'app', name: 'Reminders', icon: <Bell className="w-8 h-8 text-blue-400" />, description: 'Tasks & Reminders' },
+  { id: 'stickies', type: 'app', name: 'Stickies', icon: <StickyNote className="w-8 h-8 text-yellow-300" />, description: 'Sticky Notes' },
+  { id: 'contacts', type: 'app', name: 'Contacts', icon: <Contact className="w-8 h-8 text-amber-500" />, description: 'Address Book' },
+  { id: 'freeform', type: 'app', name: 'Freeform', icon: <Pen className="w-8 h-8 text-cyan-400" />, description: 'Whiteboard' },
+  { id: 'translate', type: 'app', name: 'Translate', icon: <Languages className="w-8 h-8 text-blue-400" />, description: 'Language Translation' },
+
+  // Media
+  { id: 'podcasts', type: 'app', name: 'Podcasts', icon: <Headphones className="w-8 h-8 text-purple-500" />, description: 'Podcasts' },
+  { id: 'books', type: 'app', name: 'Books', icon: <BookOpen className="w-8 h-8 text-orange-400" />, description: 'E-Books' },
+  { id: 'news', type: 'app', name: 'News', icon: <Newspaper className="w-8 h-8 text-red-400" />, description: 'News' },
+  { id: 'voice-memos', type: 'app', name: 'Voice Memos', icon: <Mic className="w-8 h-8 text-red-500" />, description: 'Audio Recordings' },
+  { id: 'preview', type: 'app', name: 'Preview', icon: <Eye className="w-8 h-8 text-blue-400" />, description: 'Document Viewer' },
+
+  // Navigation
+  { id: 'maps', type: 'app', name: 'Maps', icon: <MapPin className="w-8 h-8 text-green-500" />, description: 'Maps & Directions' },
+
+  // System
   { id: 'settings', type: 'app', name: 'System Preferences', icon: <Settings className="w-8 h-8 text-gray-400" />, description: 'System Settings' },
   { id: 'calculator', type: 'app', name: 'Calculator', icon: <Calculator className="w-8 h-8 text-orange-400" />, description: 'Calculator' },
+  { id: 'clock', type: 'app', name: 'Clock', icon: <Clock className="w-8 h-8 text-white" />, description: 'World Clock' },
+  { id: 'weather', type: 'app', name: 'Weather', icon: <CloudSun className="w-8 h-8 text-cyan-400" />, description: 'Weather Forecast' },
+  { id: 'activity-monitor', type: 'app', name: 'Activity Monitor', icon: <Activity className="w-8 h-8 text-green-400" />, description: 'System Monitor' },
+  { id: 'console', type: 'app', name: 'Console', icon: <Terminal className="w-8 h-8 text-gray-400" />, description: 'System Logs' },
+  { id: 'disk-utility', type: 'app', name: 'Disk Utility', icon: <HardDrive className="w-8 h-8 text-gray-300" />, description: 'Disk Management' },
+  { id: 'font-book', type: 'app', name: 'Font Book', icon: <Type className="w-8 h-8 text-gray-400" />, description: 'Font Manager' },
+  { id: 'passwords', type: 'app', name: 'Passwords', icon: <Key className="w-8 h-8 text-gray-400" />, description: 'Password Manager' },
+
+  // Reference & Finance
+  { id: 'dictionary', type: 'app', name: 'Dictionary', icon: <BookOpen className="w-8 h-8 text-gray-300" />, description: 'Dictionary & Thesaurus' },
+  { id: 'stocks', type: 'app', name: 'Stocks', icon: <TrendingUp className="w-8 h-8 text-green-400" />, description: 'Stock Market' },
+
+  // Hanzo Ecosystem
   { id: 'hanzo', type: 'app', name: 'Hanzo AI', icon: <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg" />, description: 'AI Assistant' },
-  { id: 'textedit', type: 'app', name: 'TextEdit', icon: <FileText className="w-8 h-8 text-blue-300" />, description: 'Text Editor' },
+  { id: 'lux', type: 'app', name: 'Lux Wallet', icon: <Wallet className="w-8 h-8 text-cyan-400" />, description: 'Crypto Wallet' },
+  { id: 'zoo', type: 'app', name: 'Zoo', icon: <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg" />, description: 'Zoo Labs' },
 ];
 
 export const Spotlight: React.FC<SpotlightProps> = ({ isOpen, onClose, onOpenApp }) => {

@@ -30,6 +30,21 @@ import {
   ZooWindow,
   StickiesWindow,
   ActivityMonitorWindow,
+  BooksWindow,
+  ConsoleWindow,
+  ContactsWindow,
+  DictionaryWindow,
+  DiskUtilityWindow,
+  FontBookWindow,
+  FreeformWindow,
+  MapsWindow,
+  NewsWindow,
+  PasswordsWindow,
+  PodcastsWindow,
+  PreviewWindow,
+  StocksWindow,
+  TranslateWindow,
+  VoiceMemosWindow,
 } from './windows';
 // System dialogs and screens
 import ForceQuitDialog from './ForceQuitDialog';
@@ -70,6 +85,21 @@ const APP_ID_TO_TYPE: Record<string, AppType> = {
   'xcode': 'Xcode',
   'stickies': 'Stickies',
   'activity-monitor': 'Activity Monitor',
+  'books': 'Books',
+  'console': 'Console',
+  'contacts': 'Contacts',
+  'dictionary': 'Dictionary',
+  'disk-utility': 'Disk Utility',
+  'font-book': 'Font Book',
+  'freeform': 'Freeform',
+  'maps': 'Maps',
+  'news': 'News',
+  'passwords': 'Passwords',
+  'podcasts': 'Podcasts',
+  'preview': 'Preview',
+  'stocks': 'Stocks',
+  'translate': 'Translate',
+  'voice-memos': 'Voice Memos',
 };
 
 const Desktop: React.FC<DesktopProps> = ({
@@ -348,6 +378,96 @@ const Desktop: React.FC<DesktopProps> = ({
             <ActivityMonitorWindow
               onClose={() => windows.closeWindow('Activity Monitor')}
               onFocus={() => windows.focusWindow('Activity Monitor')}
+            />
+          )}
+          {windows.isOpen('Books') && (
+            <BooksWindow
+              onClose={() => windows.closeWindow('Books')}
+              onFocus={() => windows.focusWindow('Books')}
+            />
+          )}
+          {windows.isOpen('Console') && (
+            <ConsoleWindow
+              onClose={() => windows.closeWindow('Console')}
+              onFocus={() => windows.focusWindow('Console')}
+            />
+          )}
+          {windows.isOpen('Contacts') && (
+            <ContactsWindow
+              onClose={() => windows.closeWindow('Contacts')}
+              onFocus={() => windows.focusWindow('Contacts')}
+            />
+          )}
+          {windows.isOpen('Dictionary') && (
+            <DictionaryWindow
+              onClose={() => windows.closeWindow('Dictionary')}
+              onFocus={() => windows.focusWindow('Dictionary')}
+            />
+          )}
+          {windows.isOpen('Disk Utility') && (
+            <DiskUtilityWindow
+              onClose={() => windows.closeWindow('Disk Utility')}
+              onFocus={() => windows.focusWindow('Disk Utility')}
+            />
+          )}
+          {windows.isOpen('Font Book') && (
+            <FontBookWindow
+              onClose={() => windows.closeWindow('Font Book')}
+              onFocus={() => windows.focusWindow('Font Book')}
+            />
+          )}
+          {windows.isOpen('Freeform') && (
+            <FreeformWindow
+              onClose={() => windows.closeWindow('Freeform')}
+              onFocus={() => windows.focusWindow('Freeform')}
+            />
+          )}
+          {windows.isOpen('Maps') && (
+            <MapsWindow
+              onClose={() => windows.closeWindow('Maps')}
+              onFocus={() => windows.focusWindow('Maps')}
+            />
+          )}
+          {windows.isOpen('News') && (
+            <NewsWindow
+              onClose={() => windows.closeWindow('News')}
+              onFocus={() => windows.focusWindow('News')}
+            />
+          )}
+          {windows.isOpen('Passwords') && (
+            <PasswordsWindow
+              onClose={() => windows.closeWindow('Passwords')}
+              onFocus={() => windows.focusWindow('Passwords')}
+            />
+          )}
+          {windows.isOpen('Podcasts') && (
+            <PodcastsWindow
+              onClose={() => windows.closeWindow('Podcasts')}
+              onFocus={() => windows.focusWindow('Podcasts')}
+            />
+          )}
+          {windows.isOpen('Preview') && (
+            <PreviewWindow
+              onClose={() => windows.closeWindow('Preview')}
+              onFocus={() => windows.focusWindow('Preview')}
+            />
+          )}
+          {windows.isOpen('Stocks') && (
+            <StocksWindow
+              onClose={() => windows.closeWindow('Stocks')}
+              onFocus={() => windows.focusWindow('Stocks')}
+            />
+          )}
+          {windows.isOpen('Translate') && (
+            <TranslateWindow
+              onClose={() => windows.closeWindow('Translate')}
+              onFocus={() => windows.focusWindow('Translate')}
+            />
+          )}
+          {windows.isOpen('Voice Memos') && (
+            <VoiceMemosWindow
+              onClose={() => windows.closeWindow('Voice Memos')}
+              onFocus={() => windows.focusWindow('Voice Memos')}
             />
           )}
 

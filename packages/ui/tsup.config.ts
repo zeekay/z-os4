@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'window/index': 'src/window/index.ts',
+    'quick-look/index': 'src/quick-look/index.ts',
   },
   format: ['esm'],
   dts: true,

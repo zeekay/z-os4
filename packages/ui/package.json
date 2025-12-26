@@ -13,6 +13,10 @@
     "./window": {
       "import": "./dist/window/index.js",
       "types": "./dist/window/index.d.ts"
+    },
+    "./quick-look": {
+      "import": "./dist/quick-look/index.js",
+      "types": "./dist/quick-look/index.d.ts"
     }
   },
   "scripts": {

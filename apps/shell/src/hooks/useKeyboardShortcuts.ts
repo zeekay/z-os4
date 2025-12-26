@@ -10,6 +10,7 @@ interface KeyboardShortcutsOptions {
   onPreferences?: () => void;
   onNewWindow?: () => void;
   onFullScreen?: () => void;
+  onForceQuit?: () => void;
 }
 
 export function useKeyboardShortcuts(options: KeyboardShortcutsOptions) {
@@ -23,6 +24,7 @@ export function useKeyboardShortcuts(options: KeyboardShortcutsOptions) {
     onPreferences,
     onNewWindow,
     onFullScreen,
+    onForceQuit,
   } = options;
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -79,6 +81,13 @@ export function useKeyboardShortcuts(options: KeyboardShortcutsOptions) {
             onFullScreen?.();
           }
           break;
+        case 'escape':
+          if (e.altKey) {
+            // ⌘⌥Esc - Force Quit
+            e.preventDefault();
+            onForceQuit?.();
+          }
+          break;
       }
     }
   }, [
@@ -91,6 +100,7 @@ export function useKeyboardShortcuts(options: KeyboardShortcutsOptions) {
     onPreferences,
     onNewWindow,
     onFullScreen,
+    onForceQuit,
   ]);
 
   useEffect(() => {

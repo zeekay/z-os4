@@ -29,6 +29,12 @@ import {
   LuxWindow,
   ZooWindow,
 } from './windows';
+// System dialogs and screens
+import ForceQuitDialog from './ForceQuitDialog';
+import LockScreen from './LockScreen';
+import RestartScreen from './RestartScreen';
+import AboutZosWindow from './AboutZosWindow';
+import CodeWindow from './CodeWindow';
 
 interface DesktopProps {
   isLocked: boolean;
@@ -59,6 +65,7 @@ const APP_ID_TO_TYPE: Record<string, AppType> = {
   'clock': 'Clock',
   'weather': 'Weather',
   'reminders': 'Reminders',
+  'xcode': 'Xcode',
 };
 
 const Desktop: React.FC<DesktopProps> = ({
@@ -75,6 +82,10 @@ const Desktop: React.FC<DesktopProps> = ({
   const [activeApp, setActiveApp] = useState('Finder');
   const [showSpotlight, setShowSpotlight] = useState(false);
   const [showAppSwitcher, setShowAppSwitcher] = useState(false);
+  const [showForceQuit, setShowForceQuit] = useState(false);
+  const [showAboutZos, setShowAboutZos] = useState(false);
+  const [restartMode, setRestartMode] = useState<'restart' | 'shutdown' | null>(null);
+  const [showXcode, setShowXcode] = useState(false);
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -98,9 +109,16 @@ const Desktop: React.FC<DesktopProps> = ({
       windows.openWindow('System Preferences');
       setActiveApp('System Preferences');
     },
+    onForceQuit: () => setShowForceQuit(true),
   });
 
   const handleOpenApp = useCallback((appId: string) => {
+    // Handle Xcode specially since it's not in windowManager
+    if (appId === 'xcode') {
+      setShowXcode(true);
+      setActiveApp('Xcode');
+      return;
+    }
     const appType = APP_ID_TO_TYPE[appId];
     if (appType) {
       windows.openWindow(appType);
@@ -137,25 +155,38 @@ const Desktop: React.FC<DesktopProps> = ({
   const activeAppId = Object.entries(APP_ID_TO_TYPE)
     .find(([_, appType]) => appType === activeApp)?.[0] || '';
 
-  if (isLocked) {
+  // Handle restart/shutdown completion
+  const handleRestartComplete = useCallback(() => {
+    setRestartMode(null);
+    if (restartMode === 'restart') {
+      // Show lock screen after restart
+      onLock();
+    }
+    // For shutdown, the RestartScreen handles the "wake" click
+  }, [restartMode, onLock]);
+
+  // Handle restart from menu
+  const handleRestart = useCallback(() => {
+    setRestartMode('restart');
+  }, []);
+
+  // Handle shutdown from menu
+  const handleShutdown = useCallback(() => {
+    setRestartMode('shutdown');
+  }, []);
+
+  // Show restart/shutdown screen if in that mode
+  if (restartMode) {
     return (
-      <div
-        className="h-full w-full flex items-center justify-center bg-black"
-      >
-        <div className="text-center text-white">
-          <div className="w-24 h-24 rounded-full bg-white/20 backdrop-blur-xl mb-4 mx-auto flex items-center justify-center border border-white/30">
-            <span className="text-4xl">👤</span>
-          </div>
-          <h2 className="text-2xl font-semibold mb-2">zOS</h2>
-          <button
-            onClick={onUnlock}
-            className="px-6 py-2 bg-white/20 backdrop-blur-xl rounded-full hover:bg-white/30 border border-white/20 transition-colors"
-          >
-            Click to unlock
-          </button>
-        </div>
-      </div>
+      <RestartScreen
+        mode={restartMode}
+        onComplete={handleRestartComplete}
+      />
     );
+  }
+
+  if (isLocked) {
+    return <LockScreen onUnlock={onUnlock} userName="User" />;
   }
 
   return (
@@ -170,12 +201,14 @@ const Desktop: React.FC<DesktopProps> = ({
         {/* Menu Bar */}
         <MenuBar
           appName={activeApp}
-          onShutdown={onShutdown}
-          onRestart={onRestart}
+          onShutdown={handleShutdown}
+          onRestart={handleRestart}
           onLockScreen={onLock}
           onSleep={onLock}
           onOpenSettings={() => windows.openWindow('System Preferences')}
           onOpenSpotlight={() => setShowSpotlight(true)}
+          onForceQuit={() => setShowForceQuit(true)}
+          onAboutMac={() => setShowAboutZos(true)}
           onQuitApp={() => {
             // Close the active window
             if (windows.activeApp) {
@@ -302,6 +335,14 @@ const Desktop: React.FC<DesktopProps> = ({
             />
           )}
 
+          {/* Xcode Window */}
+          {showXcode && (
+            <CodeWindow
+              onClose={() => setShowXcode(false)}
+              onFocus={() => setActiveApp('Xcode')}
+            />
+          )}
+
           {/* App Store Window */}
           {showAppStore && (
             <div className="fixed glass-window rounded-xl overflow-hidden z-50 animate-window-open"
@@ -367,6 +408,22 @@ const Desktop: React.FC<DesktopProps> = ({
           onClose={() => setShowAppSwitcher(false)}
           onSelectApp={handleOpenApp}
           runningApps={runningApps}
+        />
+
+        {/* Force Quit Dialog */}
+        <ForceQuitDialog
+          isOpen={showForceQuit}
+          onClose={() => setShowForceQuit(false)}
+          openApps={windows.openApps}
+          onForceQuit={(app) => {
+            windows.closeWindow(app);
+          }}
+        />
+
+        {/* About zOS Window */}
+        <AboutZosWindow
+          isOpen={showAboutZos}
+          onClose={() => setShowAboutZos(false)}
         />
       </div>
     </DesktopContextMenu>

@@ -33,7 +33,7 @@ jobs:
         run: pnpm turbo typecheck
 
       - name: Run tests
-        run: pnpm turbo test:run
+        run: pnpm turbo test
 
       - name: Upload shell build
         uses: actions/upload-artifact@v4

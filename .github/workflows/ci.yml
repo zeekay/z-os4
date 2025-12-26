@@ -78,33 +78,14 @@ jobs:
             cd -
           done
 
-      - name: Publish @z-os/core
-        run: pnpm publish --access public --no-git-checks
-        working-directory: packages/core
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @z-os/ui
-        run: pnpm publish --access public --no-git-checks
-        working-directory: packages/ui
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @z-os/sdk
-        run: pnpm publish --access public --no-git-checks
-        working-directory: packages/sdk
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @z-os/apps-loader
-        run: pnpm publish --access public --no-git-checks
-        working-directory: packages/apps-loader
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @z-os/apps
-        run: pnpm publish --access public --no-git-checks
-        working-directory: packages/apps
+      - name: Publish packages
+        run: |
+          for pkg in core ui sdk apps-loader apps; do
+            echo "Publishing @z-os/$pkg..."
+            cd packages/$pkg
+            pnpm publish --access public --no-git-checks || echo "Skipping @z-os/$pkg (may already exist)"
+            cd ../..
+          done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

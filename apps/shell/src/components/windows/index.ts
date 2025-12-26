@@ -18,3 +18,5 @@ export { default as MusicWindow } from './MusicWindow';
 export { default as TextEditWindow } from './TextEditWindow';
 export { default as LuxWindow } from './LuxWindow';
 export { default as ZooWindow } from './ZooWindow';
+export { default as StickiesWindow } from './StickiesWindow';
+export { default as ActivityMonitorWindow } from './ActivityMonitorWindow';

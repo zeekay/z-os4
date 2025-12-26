@@ -28,6 +28,8 @@ import {
   TextEditWindow,
   LuxWindow,
   ZooWindow,
+  StickiesWindow,
+  ActivityMonitorWindow,
 } from './windows';
 // System dialogs and screens
 import ForceQuitDialog from './ForceQuitDialog';
@@ -66,6 +68,8 @@ const APP_ID_TO_TYPE: Record<string, AppType> = {
   'weather': 'Weather',
   'reminders': 'Reminders',
   'xcode': 'Xcode',
+  'stickies': 'Stickies',
+  'activity-monitor': 'Activity Monitor',
 };
 
 const Desktop: React.FC<DesktopProps> = ({
@@ -332,6 +336,18 @@ const Desktop: React.FC<DesktopProps> = ({
             <ZooWindow
               onClose={() => windows.closeWindow('Zoo')}
               onFocus={() => windows.focusWindow('Zoo')}
+            />
+          )}
+          {windows.isOpen('Stickies') && (
+            <StickiesWindow
+              onClose={() => windows.closeWindow('Stickies')}
+              onFocus={() => windows.focusWindow('Stickies')}
+            />
+          )}
+          {windows.isOpen('Activity Monitor') && (
+            <ActivityMonitorWindow
+              onClose={() => windows.closeWindow('Activity Monitor')}
+              onFocus={() => windows.focusWindow('Activity Monitor')}
             />
           )}
 

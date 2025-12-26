@@ -169,10 +169,19 @@ const Desktop: React.FC<DesktopProps> = ({
       >
         {/* Menu Bar */}
         <MenuBar
-          activeApp={activeApp}
+          appName={activeApp}
           onShutdown={onShutdown}
           onRestart={onRestart}
-          onLock={onLock}
+          onLockScreen={onLock}
+          onSleep={onLock}
+          onOpenSettings={() => windows.openWindow('System Preferences')}
+          onOpenSpotlight={() => setShowSpotlight(true)}
+          onQuitApp={() => {
+            // Close the active window
+            if (windows.activeApp) {
+              windows.closeWindow(windows.activeApp);
+            }
+          }}
         />
 
         {/* Desktop Content */}

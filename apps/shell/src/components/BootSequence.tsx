@@ -13,7 +13,7 @@ const bootLines = [
   { text: '    ███╔╝ ██║   ██║███████╗', delay: 250, class: 'text-cyan-400' },
   { text: '   ███╔╝  ██║   ██║╚════██║', delay: 300, class: 'text-cyan-400' },
   { text: '  ███████╗╚██████╔╝███████║', delay: 350, class: 'text-cyan-400' },
-  { text: '  ╚══════╝ ╚═════╝ ╚══════╝  v1.0.0', delay: 400, class: 'text-cyan-400' },
+  { text: '  ╚══════╝ ╚═════╝ ╚══════╝  v4.0.0', delay: 400, class: 'text-cyan-400' },
   { text: '', delay: 450 },
   { text: '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓', delay: 500, class: 'text-purple-500' },
   { text: '', delay: 550 },

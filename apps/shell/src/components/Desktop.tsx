@@ -528,7 +528,7 @@ const Desktop: React.FC<DesktopProps> = ({
           onOpenApp={handleOpenApp}
           onOpenDynamicApp={openDynamicApp}
           onOpenAppStore={handleOpenAppStore}
-          onApplicationsClick={() => handleOpenApp('finder')}
+          onApplicationsClick={handleOpenAppStore}
           onDownloadsClick={() => handleOpenApp('finder')}
           onTrashClick={() => handleOpenApp('finder')}
           activeApps={[activeAppId]}

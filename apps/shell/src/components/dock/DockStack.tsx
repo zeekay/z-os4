@@ -75,13 +75,16 @@ export const DockStack: React.FC<DockStackProps> = ({
 
   if (!isOpen) return null;
 
+  // Calculate bottom position based on viewport height and icon position
+  const bottomOffset = window.innerHeight - position.y + 16;
+
   return (
     <div
       ref={ref}
       className="fixed z-[10000] animate-in fade-in zoom-in-95 duration-150"
       style={{
         left: position.x,
-        bottom: 80,
+        bottom: bottomOffset,
         transform: 'translateX(-50%)',
       }}
     >

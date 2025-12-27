@@ -193,7 +193,6 @@ export const Dock: React.FC<DockProps> = ({
       <DockStack
         isOpen={showDownloadsStack}
         onClose={() => setShowDownloadsStack(false)}
-        items={[]}
         position={downloadsPosition}
         title="Downloads"
         onItemClick={(item) => {

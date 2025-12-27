@@ -6,6 +6,7 @@ import DesktopContextMenu from './DesktopContextMenu';
 import AppStore from './AppStore';
 import Spotlight from './Spotlight';
 import AppSwitcher from './AppSwitcher';
+import Launchpad from './Launchpad';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 // System Windows - all bundled locally
 import {
@@ -113,6 +114,7 @@ const Desktop: React.FC<DesktopProps> = ({
   const { theme, customBgUrl } = useDesktopSettings();
   const wallpaper = customBgUrl || `/wallpapers/${theme}.png`;
   const [showAppStore, setShowAppStore] = useState(false);
+  const [showLaunchpad, setShowLaunchpad] = useState(false);
   const [activeApp, setActiveApp] = useState('Finder');
   const [showSpotlight, setShowSpotlight] = useState(false);
   const [showAppSwitcher, setShowAppSwitcher] = useState(false);
@@ -528,7 +530,7 @@ const Desktop: React.FC<DesktopProps> = ({
           onOpenApp={handleOpenApp}
           onOpenDynamicApp={openDynamicApp}
           onOpenAppStore={handleOpenAppStore}
-          onApplicationsClick={handleOpenAppStore}
+          onApplicationsClick={() => setShowLaunchpad(true)}
           onTrashClick={() => handleOpenApp('finder')}
           activeApps={[activeAppId]}
           runningApps={[...runningApps, showAppStore ? 'appstore' : ''].filter(Boolean)}
@@ -547,6 +549,13 @@ const Desktop: React.FC<DesktopProps> = ({
           onClose={() => setShowAppSwitcher(false)}
           onSelectApp={handleOpenApp}
           runningApps={runningApps}
+        />
+
+        {/* Launchpad */}
+        <Launchpad
+          isOpen={showLaunchpad}
+          onClose={() => setShowLaunchpad(false)}
+          onOpenApp={handleOpenApp}
         />
 
         {/* Force Quit Dialog */}

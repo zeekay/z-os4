@@ -103,6 +103,7 @@ interface MenuBarProps {
   onLockScreen?: () => void;
   onForceQuit?: () => void;
   onOpenSpotlight?: () => void;
+  onOpenAppStore?: () => void;
   darkMode?: boolean;
   onToggleDarkMode?: () => void;
 }
@@ -377,6 +378,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
   onLockScreen,
   onForceQuit,
   onOpenSpotlight,
+  onOpenAppStore,
   darkMode = false,
   onToggleDarkMode,
 }) => {
@@ -574,6 +576,12 @@ export const MenuBar: React.FC<MenuBarProps> = ({
     // Force Quit
     if (label === 'Force Quit...' && onForceQuit) {
       onForceQuit();
+      return;
+    }
+
+    // App Store
+    if (label === 'App Store...' && onOpenAppStore) {
+      onOpenAppStore();
       return;
     }
 

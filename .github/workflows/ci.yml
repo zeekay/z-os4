@@ -80,10 +80,20 @@ jobs:
 
       - name: Publish packages
         run: |
+          # Publish core packages first (dependencies)
           for pkg in core ui sdk apps-loader apps; do
             echo "Publishing @z-os/$pkg..."
             cd packages/$pkg
             pnpm publish --access public --no-git-checks || echo "Skipping @z-os/$pkg (may already exist)"
+            cd ../..
+          done
+
+          # Publish individual app packages
+          for pkg in packages/app-*/; do
+            name=$(basename $pkg)
+            echo "Publishing @z-os/$name..."
+            cd $pkg
+            pnpm publish --access public --no-git-checks || echo "Skipping @z-os/$name (may already exist)"
             cd ../..
           done
         env:

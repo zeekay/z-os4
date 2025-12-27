@@ -243,6 +243,7 @@ const Desktop: React.FC<DesktopProps> = ({
           onOpenSpotlight={() => setShowSpotlight(true)}
           onForceQuit={() => setShowForceQuit(true)}
           onAboutMac={() => setShowAboutZos(true)}
+            onOpenAppStore={handleOpenAppStore}
           onQuitApp={() => {
             // Close the active window
             if (windows.activeApp) {
@@ -527,6 +528,9 @@ const Desktop: React.FC<DesktopProps> = ({
           onOpenApp={handleOpenApp}
           onOpenDynamicApp={openDynamicApp}
           onOpenAppStore={handleOpenAppStore}
+          onApplicationsClick={() => handleOpenApp('finder')}
+          onDownloadsClick={() => handleOpenApp('finder')}
+          onTrashClick={() => handleOpenApp('finder')}
           activeApps={[activeAppId]}
           runningApps={[...runningApps, showAppStore ? 'appstore' : ''].filter(Boolean)}
         />

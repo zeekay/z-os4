@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { DockItem } from './DockItem';
+import { DockStack } from './DockStack';
 import {
   FinderIcon,
   SafariIcon,
@@ -77,7 +78,10 @@ export const Dock: React.FC<DockProps> = ({
   launchingApp,
 }) => {
   const [mouseX, setMouseX] = useState<number | null>(null);
+  const [showDownloadsStack, setShowDownloadsStack] = useState(false);
+  const [downloadsPosition, setDownloadsPosition] = useState({ x: 0, y: 0 });
   const dockRef = useRef<HTMLDivElement>(null);
+  const downloadsRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     // Track mouse position relative to dock container for magnification
@@ -91,7 +95,16 @@ export const Dock: React.FC<DockProps> = ({
     setMouseX(null);
   }, []);
 
-  const handleItemClick = useCallback((item: DockItemConfig) => {
+  const handleDownloadsClick = useCallback((e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setDownloadsPosition({
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    });
+    setShowDownloadsStack(prev => !prev);
+  }, []);
+
+  const handleItemClick = useCallback((item: DockItemConfig, e?: React.MouseEvent) => {
     switch (item.action) {
       case 'app':
         onOpenApp(item.id);
@@ -107,12 +120,12 @@ export const Dock: React.FC<DockProps> = ({
       case 'folder':
         if (item.id === 'applications' && onApplicationsClick) {
           onApplicationsClick();
-        } else if (item.id === 'downloads' && onDownloadsClick) {
-          onDownloadsClick();
+        } else if (item.id === 'downloads' && e) {
+          handleDownloadsClick(e);
         }
         break;
     }
-  }, [onOpenApp, onOpenDynamicApp, onOpenAppStore, onApplicationsClick, onDownloadsClick]);
+  }, [onOpenApp, onOpenDynamicApp, onOpenAppStore, onApplicationsClick, handleDownloadsClick]);
 
   const renderItems = (items: DockItemConfig[], startIndex: number) =>
     items.map((item, i) => (
@@ -121,8 +134,8 @@ export const Dock: React.FC<DockProps> = ({
         id={item.id}
         label={item.label}
         icon={item.icon}
-        onClick={() => handleItemClick(item)}
-        isActive={activeApps.includes(item.id)}
+        onClick={(e) => handleItemClick(item, e)}
+        isActive={activeApps.includes(item.id) || (item.id === 'downloads' && showDownloadsStack)}
         isRunning={runningApps.includes(item.id)}
         isLaunching={launchingApp === item.id}
         mouseX={mouseX}
@@ -132,48 +145,63 @@ export const Dock: React.FC<DockProps> = ({
     ));
 
   return (
-    <div
-      ref={dockRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[9999]"
-    >
+    <>
       <div
-        data-dock
-        className="
-          flex items-end gap-0.5 px-2 py-1.5
-          bg-white/10 backdrop-blur-2xl
-          rounded-2xl border border-white/20
-          shadow-[0_0_0_1px_rgba(0,0,0,0.1),0_8px_40px_rgba(0,0,0,0.4)]
-        "
+        ref={dockRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[9999]"
       >
-        {/* Main system apps */}
-        {renderItems(DOCK_ITEMS, 0)}
+        <div
+          data-dock
+          className="
+            flex items-end gap-0.5 px-2 py-1.5
+            bg-white/10 backdrop-blur-2xl
+            rounded-2xl border border-white/20
+            shadow-[0_0_0_1px_rgba(0,0,0,0.1),0_8px_40px_rgba(0,0,0,0.4)]
+          "
+        >
+          {/* Main system apps */}
+          {renderItems(DOCK_ITEMS, 0)}
 
-        {/* Separator before Hanzo/Lux/Zoo */}
-        <div className="w-px h-10 bg-white/20 mx-1 self-center" />
+          {/* Separator before Hanzo/Lux/Zoo */}
+          <div className="w-px h-10 bg-white/20 mx-1 self-center" />
 
-        {/* Hanzo ecosystem apps */}
-        {renderItems(DOCK_CUSTOM_APPS, DOCK_ITEMS.length)}
+          {/* Hanzo ecosystem apps */}
+          {renderItems(DOCK_CUSTOM_APPS, DOCK_ITEMS.length)}
 
-        {/* Separator before folders */}
-        <div className="w-px h-10 bg-white/20 mx-1 self-center" />
+          {/* Separator before folders */}
+          <div className="w-px h-10 bg-white/20 mx-1 self-center" />
 
-        {/* Folders - Applications, Downloads */}
-        {renderItems(DOCK_FOLDERS, DOCK_ITEMS.length + DOCK_CUSTOM_APPS.length)}
+          {/* Folders - Applications, Downloads */}
+          {renderItems(DOCK_FOLDERS, DOCK_ITEMS.length + DOCK_CUSTOM_APPS.length)}
 
-        {/* Trash */}
-        <DockItem
-          id="trash"
-          label="Trash"
-          icon={<TrashIcon className="w-full h-full" />}
-          onClick={onTrashClick}
-          mouseX={mouseX}
-          index={DOCK_ITEMS.length + DOCK_CUSTOM_APPS.length + DOCK_FOLDERS.length}
-          magnificationEnabled={true}
-        />
+          {/* Trash */}
+          <DockItem
+            id="trash"
+            label="Trash"
+            icon={<TrashIcon className="w-full h-full" />}
+            onClick={onTrashClick}
+            mouseX={mouseX}
+            index={DOCK_ITEMS.length + DOCK_CUSTOM_APPS.length + DOCK_FOLDERS.length}
+            magnificationEnabled={true}
+          />
+        </div>
       </div>
-    </div>
+
+      {/* Downloads Stack Popup */}
+      <DockStack
+        isOpen={showDownloadsStack}
+        onClose={() => setShowDownloadsStack(false)}
+        items={[]}
+        position={downloadsPosition}
+        title="Downloads"
+        onItemClick={(item) => {
+          console.log('Open download:', item.name);
+          setShowDownloadsStack(false);
+        }}
+      />
+    </>
   );
 };
 

@@ -529,7 +529,6 @@ const Desktop: React.FC<DesktopProps> = ({
           onOpenDynamicApp={openDynamicApp}
           onOpenAppStore={handleOpenAppStore}
           onApplicationsClick={handleOpenAppStore}
-          onDownloadsClick={() => handleOpenApp('finder')}
           onTrashClick={() => handleOpenApp('finder')}
           activeApps={[activeAppId]}
           runningApps={[...runningApps, showAppStore ? 'appstore' : ''].filter(Boolean)}

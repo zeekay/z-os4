@@ -10,7 +10,7 @@ interface DockItemProps {
   isRunning?: boolean;
   isLaunching?: boolean;
   isPinned?: boolean;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent) => void;
   onRemove?: () => void;
   mouseX: number | null;
   index: number;
@@ -90,11 +90,11 @@ export const DockItem: React.FC<DockItemProps> = ({
     return 8 + extraHeight;
   }, [magnificationEnabled, getScale, baseSize]);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     if (onClick) {
       setIsBouncing(true);
       setTimeout(() => setIsBouncing(false), 800);
-      onClick();
+      onClick(e);
     }
   }, [onClick]);
 
